@@ -7,11 +7,13 @@ tags: neural networks, deep learning, convolutional neural networks, convolution
 ---
 
 Introduction
-------------
+============
 
 In the last few years, deep neural networks have lead to breakthrough results on a variety of pattern recognition problems, such as computer vision and voice recognition. One of the essential components leading to these results has been a special kind of neural network called a *convolutional neural network*.
 
-At it's most basic, convolutional neural networks can be thought of as a kind of neural network that uses many identical copies of the same neuron. This allows the network to have lots of neurons and express computationally large models while keeping the number of actual parameters -- the values describing how neurons behave -- that need to be learned fairly small.
+At it's most basic, convolutional neural networks can be thought of as a kind of neural network that uses many identical copies of the same neuron.[^OtherWeightTies] This allows the network to have lots of neurons and express computationally large models while keeping the number of actual parameters -- the values describing how neurons behave -- that need to be learned fairly small.
+
+[^OtherWeightTies]: It should be noted that not all neural networks that use multiple copies of the same neuron are convolutional neural networks. Convolutional neural networks are just one type of neural network that uses the more general trick, *weight-tying*. Other kinds of neural network that do this are recurrent neural networks and recursive neural networks.
 
 <div class="bigcenterimgcontainer">
 <img src="img/Conv2-9x5-Conv2Conv2.png" alt="" style="">
@@ -21,10 +23,8 @@ At it's most basic, convolutional neural networks can be thought of as a kind of
 
 This trick of having multiple copies of the same neuron is roughly analogous to the abstraction of functions in mathematics and computer science. When programming, we write a function once and use it in many places -- not writing the same code a hundred times in different places makes it faster to program, and results in fewer bugs. Similarly, a convolutional neural network can learn a neuron once and use it in many places, making it easier to learn the model and reducing error.
 
-(It should be noted that not all neural networks that use multiple copies of the same neuron are convolutional neural networks. Convolutional neural networks are just one type of neural network that uses the more general trick, *weight-tying*. Other kinds of neural network that do this are recurrent neural networks and recursive neural networks.)
-
 Structure of Convolutional Neural Networks
--------------------------------------------
+==========================================
 
 Suppose you want a neural network to look at audio samples and predict whether a human is speaking or not. Maybe you want to do more analysis if someone is speaking.
 
@@ -44,9 +44,11 @@ The simplest way to try and classify them with a neural network is to just conne
 
 A more sophisticated approach notices a kind of *symmetry* in the properties it's useful to look for in the data. We care a lot about local properties of the data: What frequency of sounds are there around a given time? Are they increasing or decreasing? And so on.
 
-We care about the same properties at all points in time. It's useful to know the frequencies at the beginning, and also useful to know the frequencies at the end. And again, these are local properties, in that we only need to look at a small window of the audio sample in order to determine them.
+We care about the same properties at all points in time. It's useful to know the frequencies at the beginning, it's useful to know the frequencies in the middle, and it's also useful to know the frequencies at the end. Again, note that these are local properties, in that we only need to look at a small window of the audio sample in order to determine them.
 
-So, we can create a group of neurons, $A$, that look at small time segments of our data. A looks at all such segments, computing certain *features*. Then, the output of this *convolutional layer* is fed into a fully-connected layer, $F$.
+So, we can create a group of neurons, $A$, that look at small time segments of our data.[^modular] $A$ looks at all such segments, computing certain *features*. Then, the output of this *convolutional layer* is fed into a fully-connected layer, $F$.
+
+[^modular]: Groups of neurons, like $A$, that appear in multiple places are sometimes called *modules*, and networks that use them are sometimes called *modular neural networks*.
 
 <div class="bigcenterimgcontainer">
 <img src="img/Conv-9-Conv2.png" alt="" style="">
@@ -75,9 +77,9 @@ Convolutional layers are often interweaved with pooling layers. In particular, t
 
 Often, from a high level perspective, we don't care about the precise point in time a feature is present. If a shift in frequency occurs slightly earlier or later, does it matter?
 
-A max-pooling layer takes the maximum of features over small blocks of a previous layer. The output tells us that a feature was present in a region of the previous layer, but not precisely where.
+A max-pooling layer takes the maximum of features over small blocks of a previous layer. The output tells us if a feature was present in a region of the previous layer, but not precisely where.
 
-Max-pooling layers kind of "zoom out". They allow later convolutional layers to work on larger sections of the data, because a small patch in the output corresponds to a larger patch before the layer. They also make us invariant to some very small transformations of the data.
+Max-pooling layers kind of "zoom out". They allow later convolutional layers to work on larger sections of the data, because a small patch after the pooling layer corresponds to a much larger patch before it. They also make us invariant to some very small transformations of the data.
 
 <div class="bigcenterimgcontainer">
 <img src="img/Conv-9-Conv2Max2Conv2.png" alt="" style="">
@@ -90,7 +92,7 @@ Max-pooling layers kind of "zoom out". They allow later convolutional layers to 
 
 In our previous examples, we've used 1-dimensional convolutional layers. However, convolutional layers can work on higher-dimensional data as well. In fact, the most famous successes of convolutional neural networks are applying 2D convolutional neural networks to recognizing images.
 
-In a two-dimensional network, instead of looking at segments, $A$ will now look at patches.
+In a 2-dimensional convolutional layer, instead of looking at segments, $A$ will now look at patches.
 
 For each patch, $A$ will compute features. For example, it might learn to detect the presence of an edge. Or it might learn to detect a texture. Or perhaps a contrast between two colors.
 
@@ -141,11 +143,11 @@ That said, for the purposes of this post, we will focus on standard convolutiona
 [Lin *et al.* (2013)]: http://arxiv.org/abs/1312.4400
 
 Results of Convolutional Neural Networks
------------------------------------------
+=========================================
 
 Earlier, we alluded to recent breakthroughs in computer vision using convolutional neural networks. Before we go on, I'd like to briefly discuss some of these results as motivation.
 
-In 2012, Alex Krizhevsky, Ilya Sutskever, and Geoff Hinton at the University of Toronto blew existing image classification results out of the water ([Krizehvsky *et al.* (2012)]).
+In 2012, Alex Krizhevsky, Ilya Sutskever, and Geoff Hinton blew existing image classification results out of the water ([Krizehvsky *et al.* (2012)]).
 
 Their progress was the result of combining together a bunch of different pieces. They used GPUs to train a very large, deep, neural network. They used a new kind of neuron (ReLUs) and a new technique to reduce a problem called 'overfitting' (DropOut). They used a very large dataset with lots of image categories ([ImageNet]). And, of course, it was a convolutional neural network.
 
@@ -204,7 +206,7 @@ Convolutional neural networks are an essential tool in computer vision and moder
 [Krizehvsky *et al.* (2012)]: http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
 
 Formalizing Convolutional Neural Networks
-------------------------------------------
+=========================================
 
 Consider a 1-dimensional convolutional layer with inputs $\{x_n\}$ and outputs $\{y_n\}$:
 
@@ -253,81 +255,14 @@ For us, convolution will provide a number of benefits. Firstly, it will allow us
 > I admire the elegance of your method of computation; it must be nice to ride through these fields upon the horse of true mathematics while the like of us have to make our way laboriously on foot.   &emsp;--- Albert Einstein
 
 Next Posts in this Series
---------------------------
+==========================
 
-This post is part of a series on convolutional neural networks and their generalizations. The first two posts will be review for those familiar with deep learning, while later ones should be of interest to everyone. The plan is:
+This post is part of a series on convolutional neural networks and their generalizations. The first two posts will be review for those familiar with deep learning, while later ones should be of interest to everyone. To get updates, subscribe to my [RSS feed](../../rss.xml)! I'm aiming for daily posts this week!
 
-1. **Conv Nets: A Modular Perspective**: This post
-2. **Convolutional Perspective**: Convolutions, cross-correlation, ...
-3. **Generalization with Groups**: Motivation, Group convolutions, etc.
-4. **Generalization with Weaker Structures**: Monoidial Convolutions, etc.
-5. **Fourier Transform and Conv Nets**: Convolution theorem, FFT, group FFT (???)
-6. **Algebraic Data types and Conv Nets**
-7. **Other structures for Conv Nets**
+Please comment below or on the side. Pull requests can be made on [github](https://github.com/colah/Conv-Nets-Series).
 
-To get updates, subscribe to my RSS feed!
+Acknowledgments
+================
 
-
-Convolutions
-------------
-
-Imagine we drop a ball from some height onto the ground, where it only has one dimension of motion. *How likely is it that a ball will go a distance $c$ if you drop it and then drop it again from above the point at which it landed?*
-
-Let's break this down. After the first drop, it will land $a$ units away from the starting point with probability $f(a)$, where $f$ is the probability distribution.
-
-Now after this first drop, we pick the ball up and drop it from another height above the point where it first landed. The probability of the ball rolling $b$ units away from the new starting point is $g(b)$, where $g$ may be a different probability distribution if it's dropped from a different height.
-
-
-<div class="bigcenterimgcontainer">
-<img src="img/ProbConv-fagb.png" alt="" style="">
-</div>
-<div class="spaceafterimg"></div>
-
-
-If we fix the result of the first drop so we know the ball went distance $a$, for the ball to go a total distance $c$, the distance travelled in the second drop is also fixed at $b$, where $a+b=c$. So the probability of this happening is simply $f(a) \cdot g(b)$.[^expl]
-
-[^expl]: 
-    We want the probability of the ball rolling $a$ units the first time and also rolling $b$ units the second time. There are two ways of getting to this, the way that is more mathematically intuitive, and the way that more closely adheres to the visuals of the problem. 
-
-    We can consider $f$ and $g$ to be independent, with both distributions centered at 0 and then the distances $a$ and $b$ are added. So $P(a,b) = P(a) * P(b) = f(a) \cdot g(b)$. 
-
-    Alternatively, we can think of the probability distribution $g$ as shifted over and centered at $a$, to better visually match the problem. In this view, $P(a,b) = P(a) \cdot P(a+b \vert a)$, because the shifted version is conditional on $a$ and we now want to find the total distance. This evaluates to $f(a) \cdot g(a+b-a)=f(a) \cdot g(b)$.
-
-    So it doesn't matter whether we think about the indepedent probability distribution $g(x)$ or the conditional distribution $g(x-a)$ because both perspectives end up evaluating to the same thing.
-
-Let's think about this with a specific discrete example. We want the total distance $c$ to be 3. If the first time it rolls, $a=1$, the second time it must roll $b=2$ in order to reach our total distance $a+b=3$. The probability of this is $f(1) \cdot g(2)$. 
-
-However, this isn't the only way we could get to a total distance of 3. The ball could roll 0 units the first time, and 3 the second. Or 2 units the first time and 1 the second. It will land at a total distance of $c$ for any $a+b=c$. 
-
-<div class="bigcenterimgcontainer">
-<img src="img/ProbConv-Splits2.png" alt="" style="">
-</div>
-<div class="spaceafterimg"></div>
-
-In order to find the *total likelihood* of the ball reaching a total distance of $c$, we can't consider only one possible way of reaching $c$. Instead, we consider *all the possible ways* of partitioning $c$ into two drops $a$ and $b$ and sum over the *probability of each way*. 
-
-We already know that the probability for each case of $a+b=c$ is simply $f(a) \cdot g(b)$. So, summing over every $a+b=c$, we can denote the total likelihood as:
-$$\sum_{a+b=c} f(a) \cdot g(b)$$
-Turns out, we're doing a convolution! 
-
-
-<div class="bigcenterimgcontainer">
-<img src="img/ProbConv-fagab.png" alt="" style="">
-</div>
-<div class="spaceafterimg"></div>
-
---------
-
---------
-
---------
-
---------
-
---------
-
-
-$$y_n = \sigma\left(W\left[\begin{array}{c}x_{n}\\ x_{n+1}\\...\\\end{array}\right] + b\right)$$
-
-
+I'm grateful to Eliana Lorch, Aaron Courville, and Sebastian Zany for their comments and support.
 
