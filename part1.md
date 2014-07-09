@@ -1,9 +1,10 @@
 ---
 title: Conv Nets: A Modular Perspective
-date: 2014-06-21
+date: 2014-07-08
 author: colah
+published:true
 mathjax: on
-tags: neural networks, deep learning, convolutional neural networks, convolution, modular neural networks
+tags: neural networks, deep learning, convolutional neural networks,  modular neural networks
 ---
 
 Introduction
