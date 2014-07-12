@@ -8,7 +8,7 @@ tags: neural networks, convolutional neural networks, convolution, math, probabi
 
 In a [previous post](../2014-07-Conv-Nets-Modular/), we built up an understanding of convolutional neural networks, without referring to any significant mathematics. To go further, however, we need to understand convolutions.
 
-If we just wanted to understand convolutional neural networks, it might suffice to just roughly understand convolutions. But the aim of this series is to bring us to the frontier of convolutional neural networks and explore new options. To do that, we're going to need to understand convolutions very deeply.
+If we just wanted to understand convolutional neural networks, it might suffice to roughly understand convolutions. But the aim of this series is to bring us to the frontier of convolutional neural networks and explore new options. To do that, we're going to need to understand convolutions very deeply.
 
 Thankfully, with a few examples, convolution becomes quite a straightforward idea.
 
@@ -65,7 +65,19 @@ If we substitute $b = c-a$, we get:
 
 $$(f\ast g)(c) = \sum_a f(a) \cdot g(c-a)$$
 
-This is the standard definition of convolution.
+This is the standard definition[^AltDefBenefits] of convolution.
+
+
+[^AltDefBenefits]:
+    The non-standard definition, which I haven't previously seen, seems to have a lot of benefits. In future posts, we will find this definition very helpful because it lends itself to generalization to new algebraic structures. But it also has the advantage that it makes a lot of algebraic properties of convolutions really obvious.
+
+    For example, convolution is a commutative operation. That is, $f\ast g = g\ast f$. Why?
+
+    $$\sum_{a+b=c} f(a) \cdot g(b) ~~=~  \sum_{b+a=c} g(b) \cdot f(a)$$
+
+    Convolution is also associative. That is, $(f\ast g)\ast h = f\ast (g\ast h)$. Why?
+
+    $$\sum_{(a+b)+c=d} (f(a) \cdot g(b)) \cdot h(c) ~~=~ \sum_{a+(b+c)=d} f(a) \cdot (g(b) \cdot h(c))$$
 
 
 To make this a bit more concrete, we can think about this in terms of positions the ball might land. After the first drop, it will land at an intermediate position $a$ with probability $f(a)$. If it lands at $a$, it has probability $g(c-a)$ of landing at a position $c$.
@@ -98,66 +110,147 @@ First, an observation. Suppose the probability that a ball lands a certain dista
 </div>
 <div class="spaceafterimg"></div>
 
+If we know the ball lands at a position $c$ after the second drop, what is the probability that the previous position was $a$?
+
+<div class="bigcenterimgcontainer">
+<img src="img/ProbConv-BackProb.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
+
+So the probability that the previous position was $a$ is $g(-(a-c)) = g(c-a)$.
+
+Now, consider the probability each intermediate position contributes to the ball finally landing at $c$. We know the probability of the first drop putting the ball into the intermediate position a is $f(a)$. We also know that the probability of it having been in $a$, if it lands at $c$ is $g(c-a)$.
 
 
-Consider the probability each intermediate position contributes to the ball finally landing at $c$. We know the probability of the first drop putting the ball into the intermediate position a is $f(a)$. We also know that the probability of it having been in $a$, if it lands at $c$ is ...
+<div class="bigcenterimgcontainer">
+<img src="img/ProbConv-Intermediate.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
+
+Summing over the $a$s, we get the convolution.
+
+The advantage of this approach is that it allows us to visualize the evaluation of a convolution at a value $c$ in a single picture. By shifting the bottom half shifting around, we can evaluate the convolution at other values of $c$. This allows us to understand the convolution as a whole.
+
+For example, we can see that it peaks when the distributions align.
+
+<div class="bigcenterimgcontainer">
+<img src="img/ProbConv-Intermediate-Align.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
+
+And shrinks as the intersection between the distributions gets smaller.
+
+<div class="bigcenterimgcontainer">
+<img src="img/ProbConv-Intermediate-Sep.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
+
+By using this trick in an animation, it really becomes possible to visually understand convolutions.
+
+Below, we're able to visualize the convolution of two box functions:
+
+<div class="bigcenterimgcontainer">
+<img src="img/Wiki-BoxConvAnim.gif" alt="" style="">
+<div class="caption">From Wikipedia</div>
+</div>
+<div class="spaceafterimg"></div>
+
+Armed with this perspective, a lot of things become more intuitive.
+
+Let's consider a non-probabilistic example. Convolutions are sometimes used in audio manipulation. For example, one might use a function with two spikes in it, but zero everywhere else, to create an echo. As our double-spiked function slides, one spike hits a point in time first, adding that signal to the output sound, and later, another spike follows, adding it again.
+
+Higher Dimensional Convolutions
+=================================
+
+Convolutions are an extremely general idea. We can also use them in a higher number of dimensions.
+
+Let's consider our example of a falling ball again. Now, as it falls, it's position shifts not only in one dimension, but in two.
+
+<div class="bigcenterimgcontainer">
+<img src="img/ProbConv-TwoDim.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
+
+Convolution is the same as before:
+
+$$(f\ast g)(c) = \sum_{a+b=c} f(a) \cdot g(b)$$
+
+Except, now $a$, $b$ and $c$ are vectors. To be more explicit,
+
+$$(f\ast g)(c_1, c_2) = \sum_{\begin{array}{c}a_1+b_1=c_1\\a_2+b_2=c_2\end{array}} f(a_1,a_2) \cdot g(b_1,b_2)$$
+
+Or in the standard definition:
+
+$$(f\ast g)(c_1, c_2) = \sum_a f(a_1, a_2) \cdot g(c_1-a_1,~ c_2-a_2)$$
+
+Just like one-dimensional convolutions, we can think of a two-dimensional convolution as sliding one function on top of another, multiplying and adding.
+
+One common application of this is image processing. We can think of images as two-dimensional functions. Many important image transformations are convolutions where you convolve the image function with a very small, local function called a "kernel."
+
+<div class="centerimgcontainer">
+<img src="img/RiverTrain-ImageConvDiagram.png" alt="" style="">
+<div class="caption">From the [River Trail documentation](http://rivertrail.github.io/RiverTrail/tutorial/)</div>
+</div>
+<div class="spaceafterimg"></div>
+
+The kernel slides to every position of the image and computes a new pixel as a weighted sum of the pixels it floats over.
+
+For example, by averaging a 3x3 box of pixels, we can blur an image. To do this, our kernel takes the value $1/9$ on each pixel in the box, 
+
+<div class="bigcenterimgcontainer">
+<img src="img/Gimp-Blur.png" alt="" style="">
+<div class="caption">Derived from the [Gimp documentation](http://docs.gimp.org/en/plug-in-convmatrix.html)</div>
+</div>
+<div class="spaceafterimg"></div>
+
+We can also detect edges by taking the values $-1$ and $1$ on two adjacent pixels, and zero everywhere else. That is, we subtract two adjacent pixels. When side by side pixels are similar, this is gives us approximately zero. On edges, however, adjacent pixels are very different in the direction perpendicular to the edge.
+
+<div class="bigcenterimgcontainer">
+<img src="img/Gimp-Edge.png" alt="" style="">
+<div class="caption">Derived from the [Gimp documentation](http://docs.gimp.org/en/plug-in-convmatrix.html)</div>
+</div>
+<div class="spaceafterimg"></div>
+
+The gimp documentation has [many other examples](http://docs.gimp.org/en/plug-in-convmatrix.html).
+
+Convolutional Neural Networks
+=============================
+
+So, how does convolution relate to convolutional neural networks?
+
+Consider a 1-dimensional convolutional layer with inputs $\{x_n\}$ and outputs $\{y_n\}$, like we discussed in the [previous post](../2014-07-Conv-Nets-Modular/):
+
+<div class="bigcenterimgcontainer">
+<img src="img/Conv-9-Conv2-XY.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
+
+As we observed, we can describe the outputs in terms of the inputs:
+
+$$y_n = A(x_{n}, x_{n+1}, ...)$$
+
+Generally, $A$ would be multiple neurons. But suppose it is a single neuron for a moment.
+
+A typical neuron in a neural network is described by:
+
+$$\sigma(W_0x_0 + W_1x_1 + W_2x_2 ... + b)$$
+
+Where $x_0$, $x_1$... are the inputs. The weights, $W_0$, $W_1$, ... describe how the neuron connects to its inputs. A negative weight means that an input inhibits the neuron from firing, while a positive weight encourages it to. The weights are the heart of the neuron, controlling its behavior.[^bias] Saying that multiple neurons are identical is the same thing as saying that the weights are the same.
+
+[^bias]:
+  There's also the bias, which is the "threshold" for whether the neuron fires, but it's much simpler and I don't want to clutter this section talking about it.
 
 
 
 
+<div class="bigcenterimgcontainer">
+<img src="img/Conv-9-Conv2-XY-W.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
 
 
 
 
-
-
-
-
-
-
-
-[^explab]: 
-    We want the probability of the ball rolling $a$ units the first time and also rolling $b$ units the second time. There are two ways of getting to this, the way that is more mathematically intuitive, and the way that more closely adheres to the visuals of the problem. 
-
-    We can consider $f$ and $g$ to be independent, with both distributions centered at 0 and then the distances $a$ and $b$ are added. So $P(a,b) = P(a) * P(b) = f(a) \cdot g(b)$. 
-
-    Alternatively, we can think of the probability distribution $g$ as shifted over and centered at $a$, to better visually match the problem. In this view, $P(a,b) = P(a) \cdot P(a+b \vert a)$, because the shifted version is conditional on $a$ and we now want to find the total distance. This evaluates to $f(a) \cdot g(a+b-a)=f(a) \cdot g(b)$.
-
-    So it doesn't matter whether we think about the indepedent probability distribution $g(x)$ or the conditional distribution $g(x-a)$ because both perspectives end up evaluating to the same thing.
-
-
-
-<!-- [^StandardDefMotivation]
-
-
-
-[^StandardDefMotivation]:
-    It corresponds naturally to a slightly different way of thinking. Again, we consider the probability that the ball will fall $a$, $f(a)$. Then we consider the probability that it will land at $c$, given that it landed at $a$ the first time, $g(c-a)$.
-
-    <div class="centerimgcontainer">
-    <img src="img/ProbConv-fagca.png" alt="" style="">
-    </div>
-    <div class="spaceafterimg"></div>
-
-    The result is, again,
-
-    $$(f\ast g)(c) = \sum_a f(a) \cdot g(c-a)$$  --!>
-
-
-
-
---------
-
---------
-
---------
-
---------
-
---------
-
-
-$$y_n = \sigma\left(W\left[\begin{array}{c}x_{n}\\ x_{n+1}\\...\\\end{array}\right] + b\right)$$
 
 
 
