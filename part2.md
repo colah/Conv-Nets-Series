@@ -53,7 +53,7 @@ In order to find the *total likelihood* of the ball reaching a total distance of
 
 $$...~~ f(0)\!\cdot\! g(3) ~+~ f(1)\!\cdot\! g(2) ~+~ f(2)\!\cdot\! g(1)~~...$$
 
-We already know that the probability for each case of $a+b=c$ is simply $f(a) \cdot g(b)$. So, summing over every $a+b=c$, we can denote the total likelihood as:
+We already know that the probability for each case of $a+b=c$ is simply $f(a) \cdot g(b)$. So, summing over every solution to $a+b=c$, we can denote the total likelihood as:
 
 $$\sum_{a+b=c} f(a) \cdot g(b)$$
 
@@ -157,7 +157,7 @@ Below, we're able to visualize the convolution of two box functions:
 
 Armed with this perspective, a lot of things become more intuitive.
 
-Let's consider a non-probabilistic example. Convolutions are sometimes used in audio manipulation. For example, one might use a function with two spikes in it, but zero everywhere else, to create an echo. As our double-spiked function slides, one spike hits a point in time first, adding that signal to the output sound, and later, another spike follows, adding it again.
+Let's consider a non-probabilistic example. Convolutions are sometimes used in audio manipulation. For example, one might use a function with two spikes in it, but zero everywhere else, to create an echo. As our double-spiked function slides, one spike hits a point in time first, adding that signal to the output sound, and later, another spike follows, adding a second, delayed copy.
 
 Higher Dimensional Convolutions
 =================================
@@ -181,7 +181,7 @@ $$(f\ast g)(c_1, c_2) = \sum_{\begin{array}{c}a_1+b_1=c_1\\a_2+b_2=c_2\end{array
 
 Or in the standard definition:
 
-$$(f\ast g)(c_1, c_2) = \sum_a f(a_1, a_2) \cdot g(c_1-a_1,~ c_2-a_2)$$
+$$(f\ast g)(c_1, c_2) = \sum_{a_1, a_2} f(a_1, a_2) \cdot g(c_1-a_1,~ c_2-a_2)$$
 
 Just like one-dimensional convolutions, we can think of a two-dimensional convolution as sliding one function on top of another, multiplying and adding.
 
@@ -231,26 +231,88 @@ $$y_n = A(x_{n}, x_{n+1}, ...)$$
 
 Generally, $A$ would be multiple neurons. But suppose it is a single neuron for a moment.
 
-A typical neuron in a neural network is described by:
+Recall that a typical neuron in a neural network is described by:
 
-$$\sigma(W_0x_0 + W_1x_1 + W_2x_2 ... + b)$$
+$$\sigma(w_0x_0 + w_1x_1 + w_2x_2 ~...~ + b)$$
 
-Where $x_0$, $x_1$... are the inputs. The weights, $W_0$, $W_1$, ... describe how the neuron connects to its inputs. A negative weight means that an input inhibits the neuron from firing, while a positive weight encourages it to. The weights are the heart of the neuron, controlling its behavior.[^bias] Saying that multiple neurons are identical is the same thing as saying that the weights are the same.
+Where $x_0$, $x_1$... are the inputs. The weights, $w_0$, $w_1$, ... describe how the neuron connects to its inputs. A negative weight means that an input inhibits the neuron from firing, while a positive weight encourages it to. The weights are the heart of the neuron, controlling its behavior.[^bias] Saying that multiple neurons are identical is the same thing as saying that the weights are the same.
+
+It's this wiring of neurons, describing all the weights and which ones are identical, that convolution will handle for us.
 
 [^bias]:
   There's also the bias, which is the "threshold" for whether the neuron fires, but it's much simpler and I don't want to clutter this section talking about it.
 
+Typically, we describe all the neurons in a layers at once, rather than individually. The trick is to have a weight matrix, $W$:
 
+$$y = \sigma(Wx + b)$$
 
+For example, we get:
+
+$$y_0 = \sigma(W_{0,0}x_0 + W_{0,1}x_1 + W_{0,2}x_2 ...)$$
+
+$$y_1 = \sigma(W_{1,0}x_0 + W_{1,1}x_1 + W_{1,2}x_2 ...)$$
+
+Each row of the matrix describes the weights connect a neuron to its inputs.
+
+Returning to the convolutional layer, though, because there are multiple copies of the same neuron, many weights appear in multiple positions.
 
 <div class="bigcenterimgcontainer">
 <img src="img/Conv-9-Conv2-XY-W.png" alt="" style="">
 </div>
 <div class="spaceafterimg"></div>
 
+So while, normally, a weight matrix connects every input to every neuron with different weights:
+
+$$W = \left[\begin{array}{ccccc} 
+W_{0,0} & W_{0,1} & W_{0,2} & W_{0,3} & ...\\
+W_{1,0} & W_{1,1} & W_{1,2} & W_{1,3} & ...\\
+W_{2,0} & W_{2,1} & W_{2,2} & W_{2,3} & ...\\
+W_{3,0} & W_{3,1} & W_{3,2} & W_{3,3} & ...\\
+...     &   ...   &   ...   &  ...    & ...\\
+\end{array}\right]$$
+
+The matrix for a convolutional layer like the one above looks quite different. The same weights appear in a bunch of positions. And because neurons don't connect to many possible inputs, there's lots of zeros.
+
+$$W = \left[\begin{array}{ccccc} 
+w_0 & w_1 &  0  &  0  & ...\\
+ 0  & w_0 & w_1 &  0  & ...\\
+ 0  &  0  & w_0 & w_1 & ...\\
+ 0  &  0  &  0  & w_0 & ...\\
+... & ... & ... & ... & ...\\
+\end{array}\right]$$
 
 
+Multiplying by the above matrix is the same thing as convolving with $[...0, w_1, w_0, 0...]$.
 
+What about two-dimensional convolutional layers?
 
+<div class="centerimgcontainer">
+<img src="img/Conv2-5x5-Conv2-XY.png" alt="" style="">
+</div>
+<div class="spaceafterimg"></div>
 
+The wiring of a two dimensional convolutional layer corresponds to a two-dimensional convolution.
+
+Consider our example of using a convolution to detect edges in an image, above, by sliding a kernel around and applying it to every patch. Just like this, a convolutional layer will apply a neuron to every patch of the image.
+
+Conclusion
+===========
+
+We introduced a lot of mathematical machinery in this blog post, but it may not be obvious what we gained. Convolution is obviously a useful tool in probability theory and computer graphics, but what do we gain from phrasing convolutional neural networks in terms of convolutions?
+
+The first advantage is that we have some very powerful language for describing the wiring of networks. The examples we've dealt with so far haven't been complicated enough for this benefit to become clear, but convolutions will allow us to get rid of huge amounts of unpleasant book-keeping for us.
+
+Secondly, convolutions come with significant implementational advantages. Many libraries provide highly efficient convolution routines. Further, while convolution naively appears to be an $O(n^2)$ operation, using some rather deep mathematical insights, it is possible to create a $O(n\log(n))$ implementation. We will discuss this in much greater detail in a future post.
+
+Next Posts in this Series
+==========================
+
+This post is part of a series on convolutional neural networks and their generalizations. The first two posts will be review for those familiar with deep learning, while later ones should be of interest to everyone. To get updates, subscribe to my [RSS feed](../../rss.xml)!
+
+Please comment below or on the side. Pull requests can be made on [github](https://github.com/colah/Conv-Nets-Series).
+
+Acknowledgments
+================
+
+I'm grateful to Eliana Lorch and Dario Amodei for their comments and support.
 
