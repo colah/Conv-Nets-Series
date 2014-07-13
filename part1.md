@@ -12,7 +12,7 @@ Introduction
 
 In the last few years, deep neural networks have lead to breakthrough results on a variety of pattern recognition problems, such as computer vision and voice recognition. One of the essential components leading to these results has been a special kind of neural network called a *convolutional neural network*.
 
-At it's most basic, convolutional neural networks can be thought of as a kind of neural network that uses many identical copies of the same neuron.[^OtherWeightTies] This allows the network to have lots of neurons and express computationally large models while keeping the number of actual parameters -- the values describing how neurons behave -- that need to be learned fairly small.
+At its most basic, convolutional neural networks can be thought of as a kind of neural network that uses many identical copies of the same neuron.[^OtherWeightTies] This allows the network to have lots of neurons and express computationally large models while keeping the number of actual parameters -- the values describing how neurons behave -- that need to be learned fairly small.
 
 [^OtherWeightTies]: It should be noted that not all neural networks that use multiple copies of the same neuron are convolutional neural networks. Convolutional neural networks are just one type of neural network that uses the more general trick, *weight-tying*. Other kinds of neural network that do this are recurrent neural networks and recursive neural networks.
 
