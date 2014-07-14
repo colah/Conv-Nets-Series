@@ -258,7 +258,9 @@ For us, convolution will provide a number of benefits. Firstly, it will allow us
 Next Posts in this Series
 ==========================
 
-This post is part of a series on convolutional neural networks and their generalizations. The first two posts will be review for those familiar with deep learning, while later ones should be of interest to everyone. To get updates, subscribe to my [RSS feed](../../rss.xml)! I'm aiming for daily posts this week!
+[**Read the next post!**](../2014-07-Understanding-Convolutions/)
+
+This post is part of a series on convolutional neural networks and their generalizations. The first two posts will be review for those familiar with deep learning, while later ones should be of interest to everyone. To get updates, subscribe to my [RSS feed](../../rss.xml)!
 
 Please comment below or on the side. Pull requests can be made on [github](https://github.com/colah/Conv-Nets-Series).
 
