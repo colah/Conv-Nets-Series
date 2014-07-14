@@ -1,7 +1,8 @@
 ---
-title: Conv Nets: Understanding Convolutions
-date: 2014-06-21
+title: Understanding Convolutions
+date: 2014-07-13
 author: colah
+published: true
 mathjax: on
 tags: neural networks, convolutional neural networks, convolution, math, probability
 ---
@@ -261,6 +262,12 @@ Returning to the convolutional layer, though, because there are multiple copies 
 </div>
 <div class="spaceafterimg"></div>
 
+Which corresponds to the equations:
+
+$$y_0 = \sigma(W_0x_0 + W_1x_1 -b)$$
+
+$$y_1 = \sigma(W_0x_1 + W_1x_2 -b)$$
+
 So while, normally, a weight matrix connects every input to every neuron with different weights:
 
 $$W = \left[\begin{array}{ccccc} 
@@ -282,7 +289,7 @@ w_0 & w_1 &  0  &  0  & ...\\
 \end{array}\right]$$
 
 
-Multiplying by the above matrix is the same thing as convolving with $[...0, w_1, w_0, 0...]$.
+Multiplying by the above matrix is the same thing as convolving with $[...0, w_1, w_0, 0...]$. The function sliding to different positions corresponds to having neurons at those positions.
 
 What about two-dimensional convolutional layers?
 
@@ -304,6 +311,9 @@ The first advantage is that we have some very powerful language for describing t
 
 Secondly, convolutions come with significant implementational advantages. Many libraries provide highly efficient convolution routines. Further, while convolution naively appears to be an $O(n^2)$ operation, using some rather deep mathematical insights, it is possible to create a $O(n\log(n))$ implementation. We will discuss this in much greater detail in a future post.
 
+In fact, he use of highly-efficient parallel convolution implementations on GPUs has been essential to recent progress in computer vision.
+
+
 Next Posts in this Series
 ==========================
 
@@ -314,5 +324,9 @@ Please comment below or on the side. Pull requests can be made on [github](https
 Acknowledgments
 ================
 
-I'm grateful to Eliana Lorch and Dario Amodei for their comments and support.
+I'm extremely grateful to Eliana Lorch, for extensive discussion of convolutions and help writing this post.
+
+I'm also grateful to Michael Nielsen and Dario Amodei for their comments and support.
+
+
 
