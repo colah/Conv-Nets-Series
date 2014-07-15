@@ -311,7 +311,7 @@ The first advantage is that we have some very powerful language for describing t
 
 Secondly, convolutions come with significant implementational advantages. Many libraries provide highly efficient convolution routines. Further, while convolution naively appears to be an $O(n^2)$ operation, using some rather deep mathematical insights, it is possible to create a $O(n\log(n))$ implementation. We will discuss this in much greater detail in a future post.
 
-In fact, he use of highly-efficient parallel convolution implementations on GPUs has been essential to recent progress in computer vision.
+In fact, the use of highly-efficient parallel convolution implementations on GPUs has been essential to recent progress in computer vision.
 
 
 Next Posts in this Series
