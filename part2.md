@@ -58,7 +58,7 @@ We already know that the probability for each case of $a+b=c$ is simply $f(a) \c
 
 $$\sum_{a+b=c} f(a) \cdot g(b)$$
 
-Turns out, we're doing a convolution! In particular, the convolution of $f$ and $g$, evluated at $c$ is defined:
+Turns out, we're doing a convolution! In particular, the convolution of $f$ and $g$, evaluated at $c$ is defined:
 
 $$(f\ast g)(c) = \sum_{a+b=c} f(a) \cdot g(b)~~~~$$
 
