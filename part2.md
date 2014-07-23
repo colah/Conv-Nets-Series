@@ -247,6 +247,8 @@ Typically, we describe all the neurons in a layers at once, rather than individu
 
 $$y = \sigma(Wx + b)$$
 
+Where $\sigma$ denotes sigmoid or another neuron activation function.
+
 For example, we get:
 
 $$y_0 = \sigma(W_{0,0}x_0 + W_{0,1}x_1 + W_{0,2}x_2 ...)$$
