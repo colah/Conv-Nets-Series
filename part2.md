@@ -103,7 +103,7 @@ Visualizing Convolutions
 
 There's a very nice trick that helps one think about convolutions more easily.
 
-First, an observation. Suppose the probability that a ball lands a certain distance $x$ from where it started is $f(x)$. Then, afterwards, the probability given that it started a distance $x$ from where it landed is $f(-x)$.
+First, an observation. Suppose the probability that a ball lands a certain distance $x$ from where it started is $f(x)$. Then, afterwards, the probability that it started a distance $x$ from where it landed is $f(-x)$.
 
 
 <div class="bigcenterimgcontainer">
