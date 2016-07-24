@@ -243,7 +243,7 @@ It's this wiring of neurons, describing all the weights and which ones are ident
 [^bias]:
   There's also the bias, which is the "threshold" for whether the neuron fires, but it's much simpler and I don't want to clutter this section talking about it.
 
-Typically, we describe all the neurons in a layers at once, rather than individually. The trick is to have a weight matrix, $W$:
+Typically, we describe all the neurons in a layer at once, rather than individually. The trick is to have a weight matrix, $W$:
 
 $$y = \sigma(Wx + b)$$
 
