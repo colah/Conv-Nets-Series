@@ -120,7 +120,7 @@ If we know the ball lands at a position $c$ after the second drop, what is the p
 
 So the probability that the previous position was $a$ is $g(-(a-c)) = g(c-a)$.
 
-Now, consider the probability each intermediate position contributes to the ball finally landing at $c$. We know the probability of the first drop putting the ball into the intermediate position a is $f(a)$. We also know that the probability of it having been in $a$, if it lands at $c$ is $g(c-a)$.
+Now, consider the probability each intermediate position contributes to the ball finally landing at $c$. We know the probability of the first drop putting the ball into the intermediate position $a$ is $f(a)$. We also know that the probability of it having been in $a$, if it lands at $c$ is $g(c-a)$.
 
 
 <div class="bigcenterimgcontainer">
@@ -204,7 +204,7 @@ For example, by averaging a 3x3 box of pixels, we can blur an image. To do this,
 </div>
 <div class="spaceafterimg"></div>
 
-We can also detect edges by taking the values $-1$ and $1$ on two adjacent pixels, and zero everywhere else. That is, we subtract two adjacent pixels. When side by side pixels are similar, this is gives us approximately zero. On edges, however, adjacent pixels are very different in the direction perpendicular to the edge.
+We can also detect edges by taking the values $-1$ and $1$ on two adjacent pixels, and zero everywhere else. That is, we subtract two adjacent pixels. When side by side pixels are similar, this gives us approximately zero. On edges, however, adjacent pixels are very different in the direction perpendicular to the edge.
 
 <div class="bigcenterimgcontainer">
 <img src="img/Gimp-Edge.png" alt="" style="">
