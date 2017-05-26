@@ -247,7 +247,7 @@ $$A(x) = \sigma(Wx + b)$$
 
 one has everything they need to implement a convolutional neural network, at least in theory.
 
-In practice, this is often not best way to think about convolutional neural networks. There is an alternative formulation, in terms of a mathematical operation called *convolution*, that is often more helpful.
+In practice, this is often not the best way to think about convolutional neural networks. There is an alternative formulation, in terms of a mathematical operation called *convolution*, that is often more helpful.
 
 The convolution operation is a powerful tool. In mathematics, it comes up in diverse contexts, ranging from the study of partial differential equations to probability theory. In part because of its role in PDEs, convolution is very important in the physical sciences. It also has an important role in many applied areas, like computer graphics and signal processing.
 
