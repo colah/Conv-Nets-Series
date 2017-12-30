@@ -10,7 +10,7 @@ tags: neural networks, deep learning, convolutional neural networks,  modular ne
 Introduction
 ============
 
-In the last few years, deep neural networks have lead to breakthrough results on a variety of pattern recognition problems, such as computer vision and voice recognition. One of the essential components leading to these results has been a special kind of neural network called a *convolutional neural network*.
+In the last few years, deep neural networks have led to breakthrough results on a variety of pattern recognition problems, such as computer vision and voice recognition. One of the essential components leading to these results has been a special kind of neural network called a *convolutional neural network*.
 
 At its most basic, convolutional neural networks can be thought of as a kind of neural network that uses many identical copies of the same neuron.[^OtherWeightTies] This allows the network to have lots of neurons and express computationally large models while keeping the number of actual parameters -- the values describing how neurons behave -- that need to be learned fairly small.
 
